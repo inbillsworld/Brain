@@ -92,6 +92,28 @@ async function cloneRepository(): Promise<void> {
   const git = simpleGit();
   await git.clone(REPO_URL, CLONE_DIR);
   executionOutput.push('✅ Repositorio clonado exitosamente');
+  
+  await updateTsConfig();
+}
+
+async function updateTsConfig(): Promise<void> {
+  try {
+    const tsconfigPath = path.join(CLONE_DIR, 'tsconfig.json');
+    const tsconfigContent = await fs.readFile(tsconfigPath, 'utf-8');
+    const tsconfig = JSON.parse(tsconfigContent);
+    
+    if (!tsconfig.exclude) {
+      tsconfig.exclude = [];
+    }
+    
+    tsconfig.exclude.push('src/modules/memoriaRentable.ts');
+    tsconfig.exclude.push('src/tests/**/*');
+    
+    await fs.writeFile(tsconfigPath, JSON.stringify(tsconfig, null, 2));
+    executionOutput.push('✅ tsconfig.json actualizado (excluidos: memoriaRentable.ts, tests)');
+  } catch (error) {
+    executionOutput.push('⚠️  No se pudo actualizar tsconfig.json');
+  }
 }
 
 async function verifyStructure(): Promise<void> {
