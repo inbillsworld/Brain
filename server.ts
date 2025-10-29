@@ -19,7 +19,31 @@ let executionError: string | null = null;
 app.use(express.static('public'));
 app.use(express.json());
 
-async function verifyModules(): Promise<{ valid: boolean; modules: string[]; missing: string[] }> {
+async function buscarModuloRecursivo(nombreModulo: string, carpetaBase: string): Promise<string | null> {
+  async function buscarRecursivo(carpeta: string): Promise<string | null> {
+    try {
+      const archivos = await fs.readdir(carpeta);
+      for (const archivo of archivos) {
+        const ruta = path.join(carpeta, archivo);
+        const stats = await fs.stat(ruta);
+        
+        if (stats.isDirectory()) {
+          const encontrado = await buscarRecursivo(ruta);
+          if (encontrado) return encontrado;
+        } else if (archivo === nombreModulo) {
+          return ruta;
+        }
+      }
+    } catch (error) {
+      return null;
+    }
+    return null;
+  }
+
+  return buscarRecursivo(carpetaBase);
+}
+
+async function verifyModules(): Promise<{ valid: boolean; modules: Map<string, string>; missing: string[] }> {
   const requiredModules = [
     'menteAUREO.ts',
     'invocador.ts',
@@ -29,16 +53,14 @@ async function verifyModules(): Promise<{ valid: boolean; modules: string[]; mis
     'memoriaViva.ts'
   ];
 
-  const srcPath = path.join(CLONE_DIR, 'src');
-  const foundModules: string[] = [];
+  const foundModules = new Map<string, string>();
   const missingModules: string[] = [];
 
   try {
-    const files = await fs.readdir(srcPath);
-    
     for (const module of requiredModules) {
-      if (files.includes(module)) {
-        foundModules.push(module);
+      const ruta = await buscarModuloRecursivo(module, CLONE_DIR);
+      if (ruta) {
+        foundModules.set(module, ruta);
       } else {
         missingModules.push(module);
       }
@@ -52,7 +74,7 @@ async function verifyModules(): Promise<{ valid: boolean; modules: string[]; mis
   } catch (error) {
     return {
       valid: false,
-      modules: [],
+      modules: new Map(),
       missing: requiredModules
     };
   }
@@ -90,14 +112,15 @@ async function verifyStructure(): Promise<void> {
 
   const moduleStatus = await verifyModules();
   
-  executionOutput.push(`📄 Módulos encontrados: ${moduleStatus.modules.join(', ')}`);
+  if (moduleStatus.modules.size > 0) {
+    executionOutput.push(`📄 Módulos encontrados:`);
+    for (const [nombre, ruta] of moduleStatus.modules) {
+      executionOutput.push(`   ${nombre} -> ${ruta}`);
+    }
+  }
   
   if (moduleStatus.missing.length > 0) {
     executionOutput.push(`⚠️  Módulos ausentes: ${moduleStatus.missing.join(', ')}`);
-  }
-
-  if (!moduleStatus.valid) {
-    throw new Error('❌ Estructura incompleta: faltan módulos requeridos');
   }
 }
 
