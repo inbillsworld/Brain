@@ -1,2 +1,1 @@
-# Brain
-Nucleo Oerativo IA Aureo , mente razonadora, memoria viva, estrategia, institucional
+# AUREO — Mente sembrada, memoria viva, juicio operativo
