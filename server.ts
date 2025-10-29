@@ -108,9 +108,18 @@ async function updateTsConfig(): Promise<void> {
     
     tsconfig.exclude.push('src/modules/memoriaRentable.ts');
     tsconfig.exclude.push('src/tests/**/*');
+    tsconfig.exclude.push('src/integracion/copilotSync.ts');
+    tsconfig.exclude.push('src/integracion/lectorGitHub.ts');
+    
+    if (!tsconfig.compilerOptions) {
+      tsconfig.compilerOptions = {};
+    }
+    tsconfig.compilerOptions.target = 'ES2021';
+    tsconfig.compilerOptions.module = 'NodeNext';
+    tsconfig.compilerOptions.moduleResolution = 'NodeNext';
     
     await fs.writeFile(tsconfigPath, JSON.stringify(tsconfig, null, 2));
-    executionOutput.push('✅ tsconfig.json actualizado (excluidos: memoriaRentable.ts, tests)');
+    executionOutput.push('✅ tsconfig.json actualizado (excluidos: memoriaRentable.ts, tests, copilotSync.ts, lectorGitHub.ts)');
   } catch (error) {
     executionOutput.push('⚠️  No se pudo actualizar tsconfig.json');
   }
