@@ -47,10 +47,10 @@ async function verifyModules(): Promise<{ valid: boolean; modules: Map<string, s
   const requiredModules = [
     'menteAUREO.ts',
     'invocador.ts',
-    'pipelineSilencioso.ts',
-    'bitacora.ts',
-    'estrategia.ts',
-    'memoriaViva.ts'
+    'bitacoraViva.ts',
+    'strategy_calendar.ts',
+    'juicio.ts',
+    'modeloAUREO.ts'
   ];
 
   const foundModules = new Map<string, string>();
