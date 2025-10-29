@@ -144,6 +144,23 @@ async function verifyStructure(): Promise<void> {
   if (moduleStatus.missing.length > 0) {
     executionOutput.push(`⚠️  Módulos ausentes: ${moduleStatus.missing.join(', ')}`);
   }
+
+  executionOutput.push('');
+  executionOutput.push('📜 Certificación de integración:');
+  
+  const bridgeExists = await fs.access(path.join(CLONE_DIR, 'src/integracion/bridgeAUREO.ts')).then(() => true).catch(() => false);
+  if (bridgeExists) {
+    executionOutput.push('✅ bridgeAUREO.ts sembrado en src/integracion/');
+  } else {
+    executionOutput.push('❌ bridgeAUREO.ts NO encontrado en src/integracion/');
+  }
+
+  const githubToken = process.env.GITHUB_TOKEN;
+  if (githubToken) {
+    executionOutput.push('✅ GITHUB_TOKEN sembrado en Replit');
+  } else {
+    executionOutput.push('❌ GITHUB_TOKEN NO sembrado en Replit');
+  }
 }
 
 async function compileTypeScript(): Promise<void> {
