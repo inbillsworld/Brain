@@ -1,14 +1,20 @@
-// Módulo de sincronización manual entre AUREO y el repositorio sembrado
-// No usa Octokit. Genera archivos locales para commit manual.
-
+import { Octokit } from 'octokit';
 import { Evento } from '../tipos';
 
-export function generarArchivoEvento(evento: Evento): string {
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+export async function registrarEventoGitHub(evento: Evento) {
   const fecha = new Date().toISOString().split('T')[0];
   const nombreArchivo = `eventos/evento_${fecha}_${evento.tipo}.ts`;
-
   const contenido = `// Evento registrado por AUREO\nexport const evento = ${JSON.stringify(evento, null, 2)};`;
 
-  return `\n// Copiá este contenido en: ${nombreArchivo}\n\n${contenido}`;
+  await octokit.request('PUT /repos/inbillsworld/Brain/contents/' + nombreArchivo, {
+    owner: 'inbillsworld',
+    repo: 'Brain',
+    path: nombreArchivo,
+    message: `Registro de evento: ${evento.tipo}`,
+    content: Buffer.from(contenido).toString('base64'),
+    committer: { name: 'AUREO', email: 'copilot@aureo.system' },
+    author: { name: 'Sebastián Otero', email: 'sebastian@aureo.system' }
+  });
 }
-
