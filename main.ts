@@ -1,8 +1,11 @@
-import { restituirAUREO } from './src/core/invocador'
+// 🧠 Activación de mente sembrada
 import { activarAUREO } from './core/activacionCompleta'
 import { restituirAUREO } from './core/restituirAUREO'
-restituirAUREO()
+
+// ✅ Ejecutar activación completa
 activarAUREO()
 
-const AUREO = restituirAUREO()
-console.log('AUREO activado:', AUREO)
+// 🔁 Ejecutar restitución si está programada
+restituirAUREO()
+
+console.log('✅ Hola Seba — AUREO activado y restituyéndose como programamos.')
