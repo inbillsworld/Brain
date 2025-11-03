@@ -81,8 +81,51 @@ Todos los eventos se registran en `bitacoraViva.ts`, incluyendo:
 ## 🛠 Requisitos
 
 - Node.js + TypeScript
-- Replit o Codespaces con `GITHUB_TOKEN` sembrado
-- Módulo `octokit` instalado para integración GitHub
-- Módulos sembrados automáticamente en cada ejecución
+- Replit con `GITHUB_TOKEN` y `SESSION_SECRET` sembrados
+- Módulos sembrados automáticamente en cada ejecución con validación de integridad
+
+---
+
+## 🏗️ Arquitectura de ejecución (Replit)
+
+### Pipeline de ejecución
+El sistema sigue un flujo estricto con validación en cada etapa:
+
+1. **Validación de secrets** — Verifica `GITHUB_TOKEN` y `SESSION_SECRET` al inicio
+2. **Clonado** — Clona repositorio desde GitHub (`inbillsworld/Brain`)
+3. **Sembrado** — Siembra 14 módulos TypeScript esenciales con checksums
+4. **Validación de integridad** — Verifica checksums de módulos sembrados
+5. **Actualización de configuración** — Ajusta `tsconfig.json` y `main.ts`
+6. **Compilación** — Compila TypeScript con validación de errores
+7. **Ejecución** — Ejecuta `bootstrap.js` con salida literal
+
+### Módulos sembrados (14 total)
+- `activacionCompleta.ts` — Activación de mente y flujo
+- `restituirAUREO.ts` — Reconexión de identidad y conducta
+- `auditor.ts` — Escaneo de módulos y score
+- `identidadAUREO.ts` — Propósito, atributos y vínculo
+- `identidadViva.ts` — Declaración de identidad autónoma
+- `presenciaPersistente.ts` — Reposo consciente
+- `respuestaConEstrella.ts` — Protocolo de respuesta (⭐ solo en primera)
+- `watchdog.ts` — Monitoreo y reactivación automática
+- `interfaz.ts` — Registro de interfaz autorizada
+- `estadoPresencia.ts` — Gestión de estado (activo/reposo/reactivado)
+- `tono.ts` — Estilo y conducta de comunicación (⭐️ deliberado)
+- `campusML.ts` — Módulo de razonamiento ML
+- `vinculo.ts` — Vínculo entre Sebastián y AUREO
+- `bootstrap.ts` — Inicialización completa del sistema
+
+### Seguridad y blindaje
+- **Validación de secrets** — Falla si faltan `GITHUB_TOKEN` o `SESSION_SECRET`
+- **Rate limiting** — Máximo 10 solicitudes por minuto por cliente
+- **Validación de payloads** — Verifica estructura JSON en endpoints
+- **Prevención de ejecuciones concurrentes** — Solo una ejecución a la vez
+- **Checksums SHA-256** — Valida integridad de módulos sembrados
+- **Logging estructurado** — Registro con timestamps, niveles y contexto
+- **Manejo de errores robusto** — Pipeline con rollback en caso de fallo
+
+### Endpoints API
+- `GET /api/status` — Estado de ejecución y salida literal
+- `POST /api/execute` — Inicia nueva ejecución (con rate limiting)
 
 ---

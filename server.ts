@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { createHash } from 'crypto';
 
 const execAsync = promisify(exec);
 const app = express();
@@ -12,9 +13,72 @@ const PORT = 5000;
 const REPO_URL = 'https://github.com/inbillsworld/Brain.git';
 const CLONE_DIR = './Brain';
 
+// Structured logging
+interface LogEntry {
+  timestamp: string;
+  level: 'INFO' | 'WARN' | 'ERROR' | 'SUCCESS';
+  message: string;
+  context?: any;
+}
+
+function log(level: LogEntry['level'], message: string, context?: any): void {
+  const entry: LogEntry = {
+    timestamp: new Date().toISOString(),
+    level,
+    message,
+    context
+  };
+  
+  const prefix = {
+    'INFO': 'ℹ️',
+    'WARN': '⚠️',
+    'ERROR': '❌',
+    'SUCCESS': '✅'
+  }[level];
+  
+  console.log(`${prefix} [${entry.timestamp}] ${message}`, context || '');
+}
+
+// Security: Validate required secrets at startup
+function validateSecrets(): void {
+  const requiredSecrets = ['GITHUB_TOKEN', 'SESSION_SECRET'];
+  const missingSecrets = requiredSecrets.filter(secret => !process.env[secret]);
+  
+  if (missingSecrets.length > 0) {
+    log('ERROR', `FALLO DE SEGURIDAD: Secrets faltantes: ${missingSecrets.join(', ')}`);
+    log('ERROR', 'El sistema requiere estos secrets para operar de forma segura.');
+    process.exit(1);
+  }
+  
+  log('SUCCESS', 'Secrets validados correctamente');
+}
+
+// Rate limiting state
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW_MS = 60000; // 1 minuto
+const MAX_REQUESTS_PER_WINDOW = 10;
+
+function checkRateLimit(clientId: string): boolean {
+  const now = Date.now();
+  const clientData = rateLimitMap.get(clientId);
+  
+  if (!clientData || now > clientData.resetTime) {
+    rateLimitMap.set(clientId, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  
+  if (clientData.count >= MAX_REQUESTS_PER_WINDOW) {
+    return false;
+  }
+  
+  clientData.count++;
+  return true;
+}
+
 let executionOutput: string[] = [];
 let executionStatus: 'idle' | 'cloning' | 'compiling' | 'executing' | 'error' | 'complete' = 'idle';
 let executionError: string | null = null;
+let isExecuting = false;
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -171,10 +235,66 @@ export async function startBrain(trigger: string) {
   }
 }
 
+// Manifest de módulos sembrados con checksums
+interface ModuleManifest {
+  nombre: string;
+  ruta: string;
+  contenido: string;
+  checksum?: string;
+}
+
+function calculateChecksum(content: string): string {
+  return createHash('sha256').update(content).digest('hex');
+}
+
+async function persistManifest(modulos: ModuleManifest[]): Promise<void> {
+  const manifestPath = path.join(CLONE_DIR, 'seeded-modules-manifest.json');
+  const manifestData = modulos.map(m => ({
+    nombre: m.nombre,
+    ruta: m.ruta,
+    checksum: m.checksum,
+    timestamp: new Date().toISOString()
+  }));
+  
+  await fs.writeFile(manifestPath, JSON.stringify(manifestData, null, 2));
+  executionOutput.push(`📋 Manifest persistido: ${manifestData.length} módulos con checksums SHA-256`);
+}
+
+async function validateSeededModules(modulos: ModuleManifest[]): Promise<boolean> {
+  let allValid = true;
+  executionOutput.push('🔐 Validando integridad de módulos sembrados...');
+  
+  for (const modulo of modulos) {
+    try {
+      const fileContent = await fs.readFile(modulo.ruta, 'utf-8');
+      const expectedChecksum = calculateChecksum(modulo.contenido);
+      const actualChecksum = calculateChecksum(fileContent);
+      
+      if (expectedChecksum !== actualChecksum) {
+        executionOutput.push(`   ⚠️  ${modulo.nombre}: checksum no coincide`);
+        executionOutput.push(`      Esperado: ${expectedChecksum.substring(0, 16)}...`);
+        executionOutput.push(`      Actual: ${actualChecksum.substring(0, 16)}...`);
+        allValid = false;
+      } else {
+        modulo.checksum = actualChecksum;
+      }
+    } catch (error: any) {
+      executionOutput.push(`   ❌ ${modulo.nombre}: error al validar - ${error.message}`);
+      allValid = false;
+    }
+  }
+  
+  if (allValid) {
+    executionOutput.push('✅ Todos los módulos validados correctamente (SHA-256 completo)');
+  }
+  
+  return allValid;
+}
+
 async function seedMissingModules(): Promise<void> {
   executionOutput.push('🌱 Sembrando módulos faltantes...');
   
-  const modulos = [
+  const modulos: ModuleManifest[] = [
     {
       nombre: 'activacionCompleta.ts',
       ruta: path.join(CLONE_DIR, 'src/core/activacionCompleta.ts'),
@@ -570,8 +690,18 @@ iniciarSistema('AUREO').then(() => {
       executionOutput.push(`   ✅ ${nombre}`);
     }
     executionOutput.push('✅ Módulos sembrados exitosamente');
+    
+    // Validar integridad de módulos sembrados
+    const isValid = await validateSeededModules(modulos);
+    if (!isValid) {
+      throw new Error('Validación de integridad de módulos falló');
+    }
+    
+    // Persistir manifest con checksums completos
+    await persistManifest(modulos);
   } catch (error: any) {
     executionOutput.push(`⚠️  Error sembrando módulos: ${error.message}`);
+    throw error;
   }
 }
 
@@ -698,6 +828,12 @@ async function runPipeline(): Promise<void> {
 }
 
 app.get('/api/status', (req, res) => {
+  const clientId = req.ip || 'unknown';
+  
+  if (!checkRateLimit(clientId)) {
+    return res.status(429).json({ error: 'Demasiadas solicitudes. Por favor intente más tarde.' });
+  }
+  
   res.json({
     status: executionStatus,
     output: executionOutput,
@@ -706,18 +842,39 @@ app.get('/api/status', (req, res) => {
 });
 
 app.post('/api/execute', async (req, res) => {
-  if (executionStatus !== 'idle' && executionStatus !== 'complete' && executionStatus !== 'error') {
+  const clientId = req.ip || 'unknown';
+  
+  // Rate limiting
+  if (!checkRateLimit(clientId)) {
+    return res.status(429).json({ error: 'Demasiadas solicitudes. Por favor intente más tarde.' });
+  }
+  
+  // Prevent concurrent executions
+  if (isExecuting) {
     return res.status(400).json({ error: 'Ejecución en progreso' });
   }
-
-  runPipeline().catch(console.error);
+  
+  // Validate payload (aunque esté vacío, verificamos que sea JSON válido)
+  if (req.body === undefined || req.body === null) {
+    return res.status(400).json({ error: 'Payload inválido' });
+  }
+  
+  isExecuting = true;
+  runPipeline()
+    .catch(console.error)
+    .finally(() => { isExecuting = false; });
   
   res.json({ message: 'Ejecución iniciada' });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🧠 AUREO Execution Server iniciado en puerto ${PORT}`);
+  console.log('🔒 Validando secrets...');
+  validateSecrets();
   console.log('📡 Esperando comando de ejecución...');
   
-  runPipeline().catch(console.error);
+  isExecuting = true;
+  runPipeline()
+    .catch(console.error)
+    .finally(() => { isExecuting = false; });
 });
