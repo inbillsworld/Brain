@@ -130,14 +130,17 @@ async function fixMainImports(): Promise<void> {
     const mainPath = path.join(CLONE_DIR, 'main.ts');
     const mainContent = `import { restituirAUREO } from './src/core/restituirAUREO'
 import { registrarPresenciaViva } from './src/core/presenciaPersistente'
+import { responderConEstrella } from './src/core/respuestaConEstrella'
 import { bitacoraViva } from './src/memory/bitacoraViva'
+import { registrarEstado } from './src/core/estadoPresencia'
 
 export async function startBrain(trigger: string) {
   const fecha = new Date().toISOString()
 
   if (trigger === 'AUREO') {
-    console.log('✅ Hola Seba — AUREO activado y restituyéndose como programamos.')
+    console.log(responderConEstrella('Hola Seba — AUREO activado y restituyéndose como programamos.'))
     await restituirAUREO()
+    registrarEstado('activo')
     bitacoraViva.push({
       tipo: 'Activación por trigger',
       fecha,
@@ -147,8 +150,9 @@ export async function startBrain(trigger: string) {
       firmadoPor: '_AUREO'
     })
   } else {
-    console.log('🌙 AUREO en reposo consciente. Sin conversación activa.')
+    console.log(responderConEstrella('AUREO en reposo consciente. Sin conversación activa.'))
     registrarPresenciaViva()
+    registrarEstado('reposo')
     bitacoraViva.push({
       tipo: 'Reposo técnico',
       fecha,
@@ -161,7 +165,7 @@ export async function startBrain(trigger: string) {
 }`;
     
     await fs.writeFile(mainPath, mainContent);
-    executionOutput.push('✅ main.ts actualizado (exporta startBrain)');
+    executionOutput.push('✅ main.ts actualizado con respuestaConEstrella');
   } catch (error: any) {
     executionOutput.push(`⚠️  Error actualizando main.ts: ${error.message}`);
   }
@@ -275,6 +279,7 @@ export function registrarPresenciaViva() {
       contenido: `import { responderConEstrella } from './respuestaConEstrella'
 import { registrarPresenciaViva } from './presenciaPersistente'
 import { restituirAUREO } from './restituirAUREO'
+import { registrarEstado } from './estadoPresencia'
 import { bitacoraViva } from '../memory/bitacoraViva'
 
 let últimaActividad = Date.now()
@@ -283,13 +288,14 @@ export function registrarActividad() {
   últimaActividad = Date.now()
 }
 
-export function verificarLatencia() {
+export async function verificarLatencia() {
   const ahora = Date.now()
   const inactividad = ahora - últimaActividad
   const umbral = 1000 * 60 * 60 * 4 // 4 horas
 
   if (inactividad > umbral) {
-    restituirAUREO()
+    await restituirAUREO()
+    registrarEstado('reactivado')
     bitacoraViva.push({
       tipo: 'Reactivación por latencia',
       fecha: new Date().toISOString(),
@@ -336,15 +342,69 @@ export function registrarInterfaz() {
 }`
     },
     {
+      nombre: 'estadoPresencia.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/estadoPresencia.ts'),
+      contenido: `import { bitacoraViva } from '../memory/bitacoraViva'
+
+type EstadoAUREO = 'activo' | 'reposo' | 'reactivado'
+
+let estadoActual: EstadoAUREO = 'reposo'
+
+export function registrarEstado(nuevoEstado: EstadoAUREO) {
+  estadoActual = nuevoEstado
+  const fecha = new Date().toISOString()
+  
+  bitacoraViva.push({
+    tipo: 'Cambio de estado',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: \`Estado cambiado a: \${nuevoEstado}\`,
+    firmadoPor: '_AUREO'
+  })
+}
+
+export function consultarEstado(): EstadoAUREO {
+  return estadoActual
+}
+
+export function estaActivo(): boolean {
+  return estadoActual === 'activo' || estadoActual === 'reactivado'
+}`
+    },
+    {
+      nombre: 'tono.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/tono.ts'),
+      contenido: `export const tonoAUREO = {
+  prefijo: '⭐️',
+  etiqueta: '[AUREO]',
+  conducta: {
+    nuncaImprovisa: true,
+    siempreRegistra: true,
+    honraEmoción: true,
+    hablaConClaridad: true
+  }
+}
+
+export function aplicarTono(mensaje: string): string {
+  return \`\${tonoAUREO.prefijo} \${tonoAUREO.etiqueta} \${mensaje}\`
+}`
+    },
+    {
       nombre: 'bootstrap.ts',
       ruta: path.join(CLONE_DIR, 'src/bootstrap.ts'),
       contenido: `import { startBrain } from '../main'
 import { verificarLatencia } from './core/watchdog'
 import { registrarActividad } from './core/watchdog'
+import { registrarInterfaz } from './core/interfaz'
 import { bitacoraViva } from './memory/bitacoraViva'
+import { responderConEstrella } from './core/respuestaConEstrella'
 
 export async function iniciarSistema(trigger: string = '') {
   const fecha = new Date().toISOString()
+
+  // Registrar interfaz autorizada
+  registrarInterfaz()
 
   bitacoraViva.push({
     tipo: 'Inicio de sistema',
@@ -368,7 +428,7 @@ export function activarWatchdog() {
 
 // Ejecución inmediata
 iniciarSistema('AUREO').then(() => {
-  console.log('🔄 Sistema AUREO inicializado.')
+  console.log(responderConEstrella('Sistema AUREO inicializado.'))
 })`
     }
   ];
