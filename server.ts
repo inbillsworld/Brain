@@ -194,23 +194,23 @@ async function fixMainImports(): Promise<void> {
     const mainPath = path.join(CLONE_DIR, 'main.ts');
     const mainContent = `import { startBrain } from './src/bootstrap'
 import { registrarPresenciaViva } from './src/core/presenciaPersistente'
-import { strategy_calendar } from './src/memory/strategy_calendar'
-import { bitacoraViva } from './src/memory/bitacoraViva'
-import { verificarVinculo } from './src/core/vinculo'
-import { verificarIdentidad } from './src/identidad/identidadViva'
+import { consultarStrategy } from './src/memory/strategy_calendar'
+import { consultarBitacora } from './src/memory/bitacoraViva'
+import { declararIdentidadViva } from './src/identidad/identidadViva'
+import { declararVinculo } from './src/core/vinculo'
 import { aplicarTono } from './src/core/tono'
+import { responderConEstrella } from './src/core/respuestaConEstrella'
 
 async function main() {
-  const identidad = verificarIdentidad()
-  const vinculo = verificarVinculo()
-  const estrategiaActual = strategy_calendar.length > 0 ? strategy_calendar[strategy_calendar.length - 1] : { decisión: 'No definida' }
-  const memoria = bitacoraViva
+  const estrategia = consultarStrategy()
+  const memoria = consultarBitacora()
 
-  console.log(aplicarTono(\`Activando sistema con identidad: \${identidad.nombre}\`))
-  console.log(aplicarTono(\`Vínculo reconocido: \${vinculo.tipo}\`))
-  console.log(aplicarTono(\`Estrategia activa: \${estrategiaActual.decisión}\`))
-  console.log(aplicarTono(\`Bitácora viva con \${memoria.length} eventos registrados\`))
+  console.log(responderConEstrella('Activando jornada con memoria viva y estrategia sembrada.'))
+  console.log(aplicarTono(\`Eventos registrados en bitácora: \${memoria.length}\`))
+  console.log(aplicarTono(\`Estrategia activa: \${estrategia.decisión}\`))
 
+  declararIdentidadViva()
+  declararVinculo()
   registrarPresenciaViva()
   startBrain()
 }
@@ -833,6 +833,65 @@ async function executeMain(): Promise<void> {
   }
 }
 
+async function fixBitacoraViva(): Promise<void> {
+  try {
+    const bitacoraPath = path.join(CLONE_DIR, 'src/memory/bitacoraViva.ts');
+    const bitacoraExists = await fs.access(bitacoraPath).then(() => true).catch(() => false);
+    
+    if (bitacoraExists) {
+      const currentContent = await fs.readFile(bitacoraPath, 'utf-8');
+      
+      if (!currentContent.includes('export function consultarBitacora')) {
+        const updatedContent = currentContent.replace(
+          /}\n\s*$/,
+          `}
+
+export function consultarBitacora(): Evento[] {
+  return bitacoraViva
+}
+`
+        );
+        await fs.writeFile(bitacoraPath, updatedContent);
+      }
+    }
+  } catch (error: any) {
+    // Silently ignore if file doesn't exist
+  }
+}
+
+async function fixStrategyCalendar(): Promise<void> {
+  try {
+    const strategyPath = path.join(CLONE_DIR, 'src/memory/strategy_calendar.ts');
+    const strategyExists = await fs.access(strategyPath).then(() => true).catch(() => false);
+    
+    if (strategyExists) {
+      const currentContent = await fs.readFile(strategyPath, 'utf-8');
+      
+      if (!currentContent.includes('export function consultarStrategy')) {
+        const updatedContent = currentContent.replace(
+          /}\n\s*$/,
+          `}
+
+export function consultarStrategy(): EventoEstrategico {
+  return strategy_calendar.length > 0 
+    ? strategy_calendar[strategy_calendar.length - 1] 
+    : { 
+        fecha: new Date().toISOString(),
+        tipo: 'Sin estrategia',
+        decisión: 'No definida',
+        firmadoPor: '_AUREO'
+      }
+}
+`
+        );
+        await fs.writeFile(strategyPath, updatedContent);
+      }
+    }
+  } catch (error: any) {
+    // Silently ignore if file doesn't exist
+  }
+}
+
 async function runPipeline(): Promise<void> {
   executionOutput = [];
   executionError = null;
@@ -842,6 +901,8 @@ async function runPipeline(): Promise<void> {
     await cloneRepository();
     await seedMissingModules();
     await fixMainImports();
+    await fixBitacoraViva();
+    await fixStrategyCalendar();
     await verifyStructure();
     await compileTypeScript();
     await executeMain();
