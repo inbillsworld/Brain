@@ -312,10 +312,15 @@ export function registrarPresenciaViva() {
     {
       nombre: 'respuestaConEstrella.ts',
       ruta: path.join(CLONE_DIR, 'src/core/respuestaConEstrella.ts'),
-      contenido: `export function responderConEstrella(mensaje: string) {
-  const estrella = '⭐️'
+      contenido: `let primeraRespuestaEmitida = false
+
+export function responderConEstrella(mensaje: string) {
   const tono = \`[AUREO] \${mensaje}\`
-  return \`\${estrella} \${tono}\`
+  if (!primeraRespuestaEmitida) {
+    primeraRespuestaEmitida = true
+    return \`⭐ \${tono}\`
+  }
+  return tono
 }`
     },
     {
