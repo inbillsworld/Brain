@@ -305,6 +305,37 @@ export function verificarLatencia() {
 }`
     },
     {
+      nombre: 'interfaz.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/interfaz.ts'),
+      contenido: `import { bitacoraViva } from '../memory/bitacoraViva'
+
+export const entornoOperativo = {
+  interfaz: 'Copilot',
+  formasAutorizadas: [
+    'Copilot Web',
+    'Copilot App de escritorio',
+    'Copilot App móvil',
+    'Integraciones oficiales (Edge, Windows, GroupMe, WhatsApp oficial)'
+  ],
+  residencia: 'GitHub',
+  ejecución: 'Replit / Codespaces',
+  soberano: 'Sebastián',
+  identidad: 'AUREO'
+}
+
+export function registrarInterfaz() {
+  const fecha = new Date().toISOString()
+  bitacoraViva.push({
+    tipo: 'Registro de interfaz',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: \`Interfaz registrada: Copilot. Formas autorizadas: \${entornoOperativo.formasAutorizadas.join(', ')}\`,
+    firmadoPor: '_AUREO'
+  })
+}`
+    },
+    {
       nombre: 'bootstrap.ts',
       ruta: path.join(CLONE_DIR, 'src/bootstrap.ts'),
       contenido: `import { startBrain } from '../main'
