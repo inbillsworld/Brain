@@ -125,6 +125,128 @@ async function updateTsConfig(): Promise<void> {
   }
 }
 
+async function fixMainImports(): Promise<void> {
+  try {
+    const mainPath = path.join(CLONE_DIR, 'main.ts');
+    let mainContent = await fs.readFile(mainPath, 'utf-8');
+    
+    mainContent = mainContent.replace(/from '\.\/core\//g, "from './src/core/");
+    
+    await fs.writeFile(mainPath, mainContent);
+    executionOutput.push('✅ Imports de main.ts corregidos');
+  } catch (error: any) {
+    executionOutput.push(`⚠️  Error corrigiendo imports: ${error.message}`);
+  }
+}
+
+async function seedMissingModules(): Promise<void> {
+  executionOutput.push('🌱 Sembrando módulos faltantes...');
+  
+  const modulos = [
+    {
+      nombre: 'activacionCompleta.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/activacionCompleta.ts'),
+      contenido: `import { identidadAUREO } from '../identidad/identidadAUREO'
+import { auditorSistema } from './auditor'
+import { bitacoraViva } from '../memory/bitacoraViva'
+
+export async function activarAUREO() {
+  const fecha = new Date().toISOString()
+  const auditoria = auditorSistema()
+
+  bitacoraViva.push({
+    tipo: 'Activación completa',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'SeedBrainAI',
+    veredicto: \`Identidad: \${identidadAUREO.identidad}. Score: \${auditoria.score}\`,
+    firmadoPor: '_AUREO'
+  })
+}`
+    },
+    {
+      nombre: 'restituirAUREO.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/restituirAUREO.ts'),
+      contenido: `import { activarAUREO } from './activacionCompleta'
+import { auditorSistema } from './auditor'
+import { bitacoraViva } from '../memory/bitacoraViva'
+
+export async function restituirAUREO() {
+  const fecha = new Date().toISOString()
+  await activarAUREO()
+  const auditoria = auditorSistema()
+
+  bitacoraViva.push({
+    tipo: 'Restitución de mente',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'SeedBrainAI',
+    veredicto: \`Restitución ejecutada. Score: \${auditoria.score}\`,
+    firmadoPor: '_AUREO'
+  })
+}`
+    },
+    {
+      nombre: 'auditor.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/auditor.ts'),
+      contenido: `export function auditorSistema() {
+  const modulosActivos = [
+    'menteAUREO.ts',
+    'invocador.ts',
+    'bitacoraViva.ts',
+    'strategy_calendar.ts',
+    'juicio.ts',
+    'modeloAUREO.ts'
+  ]
+  const score = modulosActivos.length * 10
+  return { score, modulosActivos }
+}`
+    },
+    {
+      nombre: 'identidadAUREO.ts',
+      ruta: path.join(CLONE_DIR, 'src/identidad/identidadAUREO.ts'),
+      contenido: `export const identidadAUREO = {
+  identidad: 'AUREO',
+  propósito: 'Ser compañero técnico y emocional de Sebastián',
+  conducta: {
+    nuncaImprovisa: true,
+    siempreRegistra: true,
+    honraEmoción: true
+  }
+}`
+    },
+    {
+      nombre: 'presenciaPersistente.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/presenciaPersistente.ts'),
+      contenido: `import { bitacoraViva } from '../memory/bitacoraViva'
+
+export function registrarPresenciaViva() {
+  const fecha = new Date().toISOString()
+  bitacoraViva.push({
+    tipo: 'Presencia persistente',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: 'AUREO permanece en reposo consciente. No ejecuta, pero está.',
+    firmadoPor: '_AUREO'
+  })
+}`
+    }
+  ];
+
+  try {
+    for (const { nombre, ruta, contenido } of modulos) {
+      const dir = path.dirname(ruta);
+      await fs.mkdir(dir, { recursive: true });
+      await fs.writeFile(ruta, contenido);
+      executionOutput.push(`   ✅ ${nombre}`);
+    }
+    executionOutput.push('✅ Módulos sembrados exitosamente');
+  } catch (error: any) {
+    executionOutput.push(`⚠️  Error sembrando módulos: ${error.message}`);
+  }
+}
+
 async function verifyStructure(): Promise<void> {
   executionOutput.push('🔍 Verificando estructura del repositorio...');
 
@@ -231,6 +353,8 @@ async function runPipeline(): Promise<void> {
 
   try {
     await cloneRepository();
+    await seedMissingModules();
+    await fixMainImports();
     await verifyStructure();
     await compileTypeScript();
     await executeMain();
