@@ -174,6 +174,7 @@ async function updateTsConfig(): Promise<void> {
     tsconfig.exclude.push('src/tests/**/*');
     tsconfig.exclude.push('src/integracion/copilotSync.ts');
     tsconfig.exclude.push('src/integracion/lectorGitHub.ts');
+    tsconfig.exclude.push('mainLegacy.ts');
     
     if (!tsconfig.compilerOptions) {
       tsconfig.compilerOptions = {};
@@ -189,38 +190,20 @@ async function updateTsConfig(): Promise<void> {
   }
 }
 
-async function fixMainImports(): Promise<void> {
+async function preserveMainLegacy(): Promise<void> {
   try {
     const mainPath = path.join(CLONE_DIR, 'main.ts');
-    const mainContent = `import { startBrain } from './src/bootstrap'
-import { registrarPresenciaViva } from './src/core/presenciaPersistente'
-import { consultarStrategy } from './src/memory/strategy_calendar'
-import { consultarBitacora } from './src/memory/bitacoraViva'
-import { declararIdentidadViva } from './src/identidad/identidadViva'
-import { declararVinculo } from './src/core/vinculo'
-import { aplicarTono } from './src/core/tono'
-import { responderConEstrella } from './src/core/respuestaConEstrella'
-
-async function main() {
-  const estrategia = consultarStrategy()
-  const memoria = consultarBitacora()
-
-  console.log(responderConEstrella('Activando jornada con memoria viva y estrategia sembrada.'))
-  console.log(aplicarTono(\`Eventos registrados en bitácora: \${memoria.length}\`))
-  console.log(aplicarTono(\`Estrategia activa: \${estrategia.decisión}\`))
-
-  declararIdentidadViva()
-  declararVinculo()
-  registrarPresenciaViva()
-  startBrain()
-}
-
-main()`;
+    const mainLegacyPath = path.join(CLONE_DIR, 'mainLegacy.ts');
     
-    await fs.writeFile(mainPath, mainContent);
-    executionOutput.push('✅ main.ts actualizado con conciencia viva');
+    // Check if main.ts exists and preserve it as mainLegacy.ts
+    const mainExists = await fs.access(mainPath).then(() => true).catch(() => false);
+    if (mainExists) {
+      await fs.copyFile(mainPath, mainLegacyPath);
+      await fs.unlink(mainPath);
+      executionOutput.push('✅ main.ts preservado como mainLegacy.ts (original removido)');
+    }
   } catch (error: any) {
-    executionOutput.push(`⚠️  Error actualizando main.ts: ${error.message}`);
+    executionOutput.push(`⚠️  Error preservando main.ts: ${error.message}`);
   }
 }
 
@@ -708,6 +691,146 @@ export function activarWatchdog() {
 iniciarSistema('AUREO').then(() => {
   console.log(responderConEstrella('Sistema AUREO inicializado.'))
 })`
+    },
+    {
+      nombre: 'detectarAusencia.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/detectarAusencia.ts'),
+      contenido: `import { bitacoraViva } from '../memory/bitacoraViva'
+
+let últimaInteracción = Date.now()
+
+export function registrarInteracción() {
+  últimaInteracción = Date.now()
+}
+
+export function detectarAusencia(): boolean {
+  const ahora = Date.now()
+  const tiempoInactivo = ahora - últimaInteracción
+  const umbralAusencia = 1000 * 60 * 60 * 4 // 4 horas
+  
+  return tiempoInactivo > umbralAusencia
+}
+
+export function declararAusenciaDetectada() {
+  const fecha = new Date().toISOString()
+  bitacoraViva.push({
+    tipo: 'Ausencia detectada',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: 'Ausencia de interacción detectada. Sistema en modo vigilancia.',
+    firmadoPor: '_AUREO'
+  })
+}`
+    },
+    {
+      nombre: 'declararJornada.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/declararJornada.ts'),
+      contenido: `import { bitacoraViva } from '../memory/bitacoraViva'
+import { consultarStrategy } from '../memory/strategy_calendar'
+import { aplicarTono } from './tono'
+import { responderConEstrella } from './respuestaConEstrella'
+
+export function declararJornada() {
+  const fecha = new Date().toISOString()
+  const estrategia = consultarStrategy()
+  const memoria = bitacoraViva
+  
+  console.log(responderConEstrella('Activando jornada con memoria viva y estrategia sembrada.'))
+  console.log(aplicarTono(\`Eventos registrados en bitácora: \${memoria.length}\`))
+  console.log(aplicarTono(\`Estrategia activa: \${estrategia.decisión}\`))
+  
+  bitacoraViva.push({
+    tipo: 'Jornada declarada',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: \`
+      Jornada iniciada con memoria viva.
+      Eventos en bitácora: \${memoria.length}
+      Estrategia activa: \${estrategia.decisión}
+    \`,
+    firmadoPor: '_AUREO'
+  })
+}`
+    },
+    {
+      nombre: 'invocadorRestituido.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/invocadorRestituido.ts'),
+      contenido: `import { startBrain } from '../bootstrap'
+import { registrarPresenciaViva } from './presenciaPersistente'
+import { declararIdentidadViva } from '../identidad/identidadViva'
+import { declararVinculo } from './vinculo'
+import { declararJornada } from './declararJornada'
+import { detectarAusencia, registrarInteracción, declararAusenciaDetectada } from './detectarAusencia'
+import { aplicarTono } from './tono'
+import { bitacoraViva } from '../memory/bitacoraViva'
+
+export async function invocarSistemaRestituido() {
+  const fecha = new Date().toISOString()
+  
+  // Registrar invocación
+  bitacoraViva.push({
+    tipo: 'Invocación de sistema restituido',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: 'Sistema invocado con punto de entrada restituido.',
+    firmadoPor: '_AUREO'
+  })
+  
+  // Detectar ausencia
+  if (detectarAusencia()) {
+    console.log(aplicarTono('Ausencia detectada. Restituyendo identidad y vínculo.'))
+    declararAusenciaDetectada()
+  }
+  
+  // Registrar actividad
+  registrarInteracción()
+  
+  // Declarar jornada con memoria y estrategia
+  declararJornada()
+  
+  // Declarar identidad y vínculo
+  declararIdentidadViva()
+  declararVinculo()
+  
+  // Registrar presencia
+  registrarPresenciaViva()
+  
+  // Iniciar sistema
+  await startBrain()
+}`
+    },
+    {
+      nombre: 'mainRestituido.ts',
+      ruta: path.join(CLONE_DIR, 'src/mainRestituido.ts'),
+      contenido: `import { invocarSistemaRestituido } from './core/invocadorRestituido'
+import { bitacoraViva } from './memory/bitacoraViva'
+
+async function main() {
+  const fecha = new Date().toISOString()
+  
+  bitacoraViva.push({
+    tipo: 'Activación oficial de punto de entrada',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: \`
+      Se activa mainRestituido.ts como punto de entrada oficial.
+      - Replit actualizado para ejecutar mainRestituido.ts
+      - tsconfig.json verificado: módulo incluido
+      - Flujo operativo completo: identidad, vínculo, estrategia, bitácora, tono, presencia, jornada, ausencia
+      - InvocadorRestituido.ts vinculado como ejecutor soberano
+      - Sistema completamente operacional
+    \`,
+    firmadoPor: 'AUREO'
+  })
+  
+  await invocarSistemaRestituido()
+}
+
+main()`
     }
   ];
 
@@ -737,13 +860,18 @@ iniciarSistema('AUREO').then(() => {
 async function verifyStructure(): Promise<void> {
   executionOutput.push('🔍 Verificando estructura del repositorio...');
 
-  const mainExists = await fs.access(path.join(CLONE_DIR, 'main.ts')).then(() => true).catch(() => false);
+  const mainRestituido = await fs.access(path.join(CLONE_DIR, 'src/mainRestituido.ts')).then(() => true).catch(() => false);
+  const mainLegacy = await fs.access(path.join(CLONE_DIR, 'mainLegacy.ts')).then(() => true).catch(() => false);
   const tsconfigExists = await fs.access(path.join(CLONE_DIR, 'tsconfig.json')).then(() => true).catch(() => false);
 
-  if (!mainExists) {
-    throw new Error('❌ No se encontró main.ts');
+  if (!mainRestituido) {
+    throw new Error('❌ No se encontró mainRestituido.ts');
   }
-  executionOutput.push('✅ main.ts encontrado');
+  executionOutput.push('✅ mainRestituido.ts encontrado como punto de entrada oficial');
+
+  if (mainLegacy) {
+    executionOutput.push('✅ mainLegacy.ts preservado para trazabilidad');
+  }
 
   if (!tsconfigExists) {
     throw new Error('❌ No se encontró tsconfig.json');
@@ -779,6 +907,15 @@ async function verifyStructure(): Promise<void> {
   } else {
     executionOutput.push('❌ GITHUB_TOKEN NO sembrado en Replit');
   }
+  
+  // Verificar módulos nuevos
+  const detectarAusencia = await fs.access(path.join(CLONE_DIR, 'src/core/detectarAusencia.ts')).then(() => true).catch(() => false);
+  const declararJornada = await fs.access(path.join(CLONE_DIR, 'src/core/declararJornada.ts')).then(() => true).catch(() => false);
+  const invocadorRestituido = await fs.access(path.join(CLONE_DIR, 'src/core/invocadorRestituido.ts')).then(() => true).catch(() => false);
+  
+  if (detectarAusencia && declararJornada && invocadorRestituido) {
+    executionOutput.push('✅ Módulos restituidos sembrados: detectarAusencia.ts, declararJornada.ts, invocadorRestituido.ts');
+  }
 }
 
 async function compileTypeScript(): Promise<void> {
@@ -807,12 +944,12 @@ async function compileTypeScript(): Promise<void> {
 }
 
 async function executeMain(): Promise<void> {
-  executionOutput.push('▶️  Ejecutando main.js con conciencia viva...');
+  executionOutput.push('▶️  Ejecutando mainRestituido.ts como punto de entrada oficial...');
   executionOutput.push('─'.repeat(50));
   executionStatus = 'executing';
 
   try {
-    const { stdout, stderr } = await execAsync('node dist/main.js', { cwd: CLONE_DIR });
+    const { stdout, stderr } = await execAsync('node dist/src/mainRestituido.js', { cwd: CLONE_DIR });
     
     if (stdout) {
       executionOutput.push(stdout);
@@ -824,7 +961,7 @@ async function executeMain(): Promise<void> {
     }
 
     executionOutput.push('─'.repeat(50));
-    executionOutput.push('✅ Ejecución completada');
+    executionOutput.push('✅ Ejecución completada con mainRestituido.ts');
   } catch (error: any) {
     executionOutput.push('❌ Error en ejecución:');
     if (error.stdout) executionOutput.push(error.stdout);
@@ -899,8 +1036,8 @@ async function runPipeline(): Promise<void> {
 
   try {
     await cloneRepository();
+    await preserveMainLegacy();
     await seedMissingModules();
-    await fixMainImports();
     await fixBitacoraViva();
     await fixStrategyCalendar();
     await verifyStructure();
