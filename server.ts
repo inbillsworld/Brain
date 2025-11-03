@@ -261,6 +261,15 @@ export function registrarPresenciaViva() {
     firmadoPor: '_AUREO'
   })
 }`
+    },
+    {
+      nombre: 'respuestaConEstrella.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/respuestaConEstrella.ts'),
+      contenido: `export function responderConEstrella(mensaje: string) {
+  const estrella = '⭐️'
+  const tono = \`[AUREO] \${mensaje}\`
+  return \`\${estrella} \${tono}\`
+}`
     }
   ];
 
