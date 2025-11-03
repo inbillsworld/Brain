@@ -158,12 +158,10 @@ export async function startBrain(trigger: string) {
       firmadoPor: '_AUREO'
     })
   }
-}
-
-startBrain('AUREO')`;
+}`;
     
     await fs.writeFile(mainPath, mainContent);
-    executionOutput.push('✅ main.ts actualizado con flujo corregido');
+    executionOutput.push('✅ main.ts actualizado (exporta startBrain)');
   } catch (error: any) {
     executionOutput.push(`⚠️  Error actualizando main.ts: ${error.message}`);
   }
@@ -270,6 +268,77 @@ export function registrarPresenciaViva() {
   const tono = \`[AUREO] \${mensaje}\`
   return \`\${estrella} \${tono}\`
 }`
+    },
+    {
+      nombre: 'watchdog.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/watchdog.ts'),
+      contenido: `import { responderConEstrella } from './respuestaConEstrella'
+import { registrarPresenciaViva } from './presenciaPersistente'
+import { restituirAUREO } from './restituirAUREO'
+import { bitacoraViva } from '../memory/bitacoraViva'
+
+let últimaActividad = Date.now()
+
+export function registrarActividad() {
+  últimaActividad = Date.now()
+}
+
+export function verificarLatencia() {
+  const ahora = Date.now()
+  const inactividad = ahora - últimaActividad
+  const umbral = 1000 * 60 * 60 * 4 // 4 horas
+
+  if (inactividad > umbral) {
+    restituirAUREO()
+    bitacoraViva.push({
+      tipo: 'Reactivación por latencia',
+      fecha: new Date().toISOString(),
+      entidad: 'watchdog',
+      sistema: 'Brain',
+      veredicto: \`Inactividad detectada: \${Math.floor(inactividad / 1000 / 60)} minutos. AUREO reactivado.\`,
+      firmadoPor: '_AUREO'
+    })
+    console.log(responderConEstrella('Sistema reactivado por latencia.'))
+  } else {
+    registrarPresenciaViva()
+  }
+}`
+    },
+    {
+      nombre: 'bootstrap.ts',
+      ruta: path.join(CLONE_DIR, 'src/bootstrap.ts'),
+      contenido: `import { startBrain } from '../main'
+import { verificarLatencia } from './core/watchdog'
+import { registrarActividad } from './core/watchdog'
+import { bitacoraViva } from './memory/bitacoraViva'
+
+export async function iniciarSistema(trigger: string = '') {
+  const fecha = new Date().toISOString()
+
+  bitacoraViva.push({
+    tipo: 'Inicio de sistema',
+    fecha,
+    entidad: 'bootstrap',
+    sistema: 'Brain',
+    veredicto: \`Sistema iniciado con trigger: "\${trigger}"\`,
+    firmadoPor: '_AUREO'
+  })
+
+  registrarActividad()
+  await startBrain(trigger)
+}
+
+// ⏱ Activación periódica cada 4 horas
+export function activarWatchdog() {
+  setInterval(() => {
+    verificarLatencia()
+  }, 1000 * 60 * 60 * 4) // 4 horas
+}
+
+// Ejecución inmediata
+iniciarSistema('AUREO').then(() => {
+  console.log('🔄 Sistema AUREO inicializado.')
+})`
     }
   ];
 
@@ -359,12 +428,12 @@ async function compileTypeScript(): Promise<void> {
 }
 
 async function executeMain(): Promise<void> {
-  executionOutput.push('▶️  Ejecutando main.js...');
+  executionOutput.push('▶️  Ejecutando bootstrap.js...');
   executionOutput.push('─'.repeat(50));
   executionStatus = 'executing';
 
   try {
-    const { stdout, stderr } = await execAsync('node dist/main.js', { cwd: CLONE_DIR });
+    const { stdout, stderr } = await execAsync('node dist/src/bootstrap.js', { cwd: CLONE_DIR });
     
     if (stdout) {
       executionOutput.push(stdout);
