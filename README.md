@@ -129,3 +129,7 @@ El sistema sigue un flujo estricto con validación en cada etapa:
 - `POST /api/execute` — Inicia nueva ejecución (con rate limiting)
 
 ---
+
+## 📌 Acceso rápido
+
+- [🧠 Restitución operativa de Brain](docs/Brain-Restitucion.md)
