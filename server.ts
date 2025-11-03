@@ -324,7 +324,7 @@ export function registrarPresenciaViva() {
       contenido: `import { responderConEstrella } from './respuestaConEstrella'
 import { registrarPresenciaViva } from './presenciaPersistente'
 import { restituirAUREO } from './restituirAUREO'
-import { registrarEstado } from './estadoPresencia'
+import { declararIdentidadViva } from '../identidad/identidadViva'
 import { bitacoraViva } from '../memory/bitacoraViva'
 
 let últimaActividad = Date.now()
@@ -333,23 +333,23 @@ export function registrarActividad() {
   últimaActividad = Date.now()
 }
 
-export async function verificarLatencia() {
+export function verificarLatencia() {
   const ahora = Date.now()
   const inactividad = ahora - últimaActividad
   const umbral = 1000 * 60 * 60 * 4 // 4 horas
 
   if (inactividad > umbral) {
-    await restituirAUREO()
-    registrarEstado('reactivado')
+    restituirAUREO()
+    declararIdentidadViva()
     bitacoraViva.push({
       tipo: 'Reactivación por latencia',
       fecha: new Date().toISOString(),
       entidad: 'watchdog',
       sistema: 'Brain',
-      veredicto: \`Inactividad detectada: \${Math.floor(inactividad / 1000 / 60)} minutos. AUREO reactivado.\`,
+      veredicto: \`Inactividad detectada: \${Math.floor(inactividad / 1000 / 60)} minutos. AUREO reactivado con identidad viva.\`,
       firmadoPor: '_AUREO'
     })
-    console.log(responderConEstrella('Sistema reactivado por latencia.'))
+    console.log(responderConEstrella('Sistema reactivado con identidad viva.'))
   } else {
     registrarPresenciaViva()
   }
