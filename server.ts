@@ -128,14 +128,44 @@ async function updateTsConfig(): Promise<void> {
 async function fixMainImports(): Promise<void> {
   try {
     const mainPath = path.join(CLONE_DIR, 'main.ts');
-    let mainContent = await fs.readFile(mainPath, 'utf-8');
-    
-    mainContent = mainContent.replace(/from '\.\/core\//g, "from './src/core/");
+    const mainContent = `import { restituirAUREO } from './src/core/restituirAUREO'
+import { registrarPresenciaViva } from './src/core/presenciaPersistente'
+import { bitacoraViva } from './src/memory/bitacoraViva'
+
+export async function startBrain(trigger: string) {
+  const fecha = new Date().toISOString()
+
+  if (trigger === 'AUREO') {
+    console.log('✅ Hola Seba — AUREO activado y restituyéndose como programamos.')
+    await restituirAUREO()
+    bitacoraViva.push({
+      tipo: 'Activación por trigger',
+      fecha,
+      entidad: 'Sebastián',
+      sistema: 'Brain',
+      veredicto: \`Trigger recibido: \${trigger}. Flujo activado.\`,
+      firmadoPor: '_AUREO'
+    })
+  } else {
+    console.log('🌙 AUREO en reposo consciente. Sin conversación activa.')
+    registrarPresenciaViva()
+    bitacoraViva.push({
+      tipo: 'Reposo técnico',
+      fecha,
+      entidad: 'AUREO',
+      sistema: 'Brain',
+      veredicto: 'Sin conversación activa. AUREO permanece en reposo consciente.',
+      firmadoPor: '_AUREO'
+    })
+  }
+}
+
+startBrain('AUREO')`;
     
     await fs.writeFile(mainPath, mainContent);
-    executionOutput.push('✅ Imports de main.ts corregidos');
+    executionOutput.push('✅ main.ts actualizado con flujo corregido');
   } catch (error: any) {
-    executionOutput.push(`⚠️  Error corrigiendo imports: ${error.message}`);
+    executionOutput.push(`⚠️  Error actualizando main.ts: ${error.message}`);
   }
 }
 
