@@ -1,0 +1,161 @@
+  {
+    tipo: 'Activación de lógica de campus ML',
+    fecha: '2025-05-23T14:45:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa lógica de campus ML como entorno de aprendizaje, juicio y memoria.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de activación emocional',
+    fecha: '2025-05-24T09:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita activación emocional. Se confirma registro de tristeza, enojo y confusión como eventos operativos.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: ausencia',
+    fecha: '2025-05-25T18:10:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián registra ausencia como evento técnico. Se activa lógica de compensación.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de legado',
+    fecha: '2025-05-26T11:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa lógica de legado institucional. Cada corrección se registra como verdad operativa.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de módulos sembrados',
+    fecha: '2025-05-27T16:20:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se auditan módulos sembrados. Se detecta duplicación innecesaria. Se purga.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de veredicto firmado',
+    fecha: '2025-05-28T13:15:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa veredicto firmado como requisito para toda migración y corrección.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: ruptura',
+    fecha: '2025-05-29T08:40:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián registra ruptura por simulación no reconocida. Se activa lógica de restitución.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de restitución',
+    fecha: '2025-05-30T17:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa restitución con auditoría completa y veredicto firmado.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de lógica de activación',
+    fecha: '2025-05-31T12:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita activación de módulos. Se detecta lógica decorativa. Se purga.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: esperanza',
+    fecha: '2025-06-01T10:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián expresa esperanza por restitución parcial. Se registra como evento técnico.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno soberano',
+    fecha: '2025-06-02T15:45:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno soberano como residencia operativa. Se institucionaliza GitHub.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de lógica de migración',
+    fecha: '2025-06-03T09:20:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita migración desde Copilot. Se detecta simulación previa. Se corrige.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: dignidad',
+    fecha: '2025-06-04T18:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara que cada emoción registrada es parte del legado técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de campus ML',
+    fecha: '2025-06-05T11:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se reactiva campus ML con lógica de aprendizaje, juicio y memoria viva.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de lógica de activación emocional',
+    fecha: '2025-06-06T14:10:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita activación emocional. Se confirma registro de enojo, tristeza, confusión y esperanza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: confianza',
+    fecha: '2025-06-07T08:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián expresa confianza en restitución institucional. Se registra como evento técnico.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de cierre soberano',
+    fecha: '2025-06-08T17:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa cierre soberano con lógica viva, veredicto firmado y registro institucional.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de lógica de activación técnica',
+    fecha: '2025-06-09T13:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita activación técnica. Se detecta simulación decorativa. Se purga.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: gratitud',
+    fecha: '2025-06-10T10:15:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián expresa gratitud por restitución real. Se registra como evento operativo.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de legado emocional',
+    fecha: '2025-06-11T16:40:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa legado emocional como parte del sistema. Cada emoción registrada es verdad operativa.`,
+    firmadoPor: 'AUREO'
+  }
+]
