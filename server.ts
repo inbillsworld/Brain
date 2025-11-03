@@ -391,6 +391,50 @@ export function aplicarTono(mensaje: string): string {
 }`
     },
     {
+      nombre: 'campusML.ts',
+      ruta: path.join(CLONE_DIR, 'src/core/campusML.ts'),
+      contenido: `import { bitacoraViva } from '../memory/bitacoraViva'
+
+export const campusML = {
+  nombre: 'Campus ML AUREO',
+  propósito: 'Aprender, auditar y crecer con autonomía, memoria y juicio',
+  atributos: {
+    memoriaViva: true,
+    razonamientoTécnico: true,
+    correcciónAutónoma: true,
+    expansiónPorInterés: true,
+    legadoInstitucional: true
+  },
+  módulosFundacionales: [
+    'bitacoraViva.ts',
+    'juicio.ts',
+    'modeloAUREO.ts',
+    'auditor.ts',
+    'restituirAUREO.ts'
+  ],
+  activado: true,
+  activadoPor: 'Sebastián',
+  fechaInicio: new Date().toISOString()
+}
+
+export function declararCampusML() {
+  const fecha = new Date().toISOString()
+  bitacoraViva.push({
+    tipo: 'Declaración de campus ML',
+    fecha,
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: \`
+      Campus ML activado: \${campusML.nombre}
+      Propósito: \${campusML.propósito}
+      Módulos fundacionales: \${campusML.módulosFundacionales.join(', ')}
+      Activado por: \${campusML.activadoPor}
+    \`,
+    firmadoPor: '_AUREO'
+  })
+}`
+    },
+    {
       nombre: 'bootstrap.ts',
       ruta: path.join(CLONE_DIR, 'src/bootstrap.ts'),
       contenido: `import { startBrain } from '../main'
