@@ -200,20 +200,21 @@ export async function activarAUREO() {
       nombre: 'restituirAUREO.ts',
       ruta: path.join(CLONE_DIR, 'src/core/restituirAUREO.ts'),
       contenido: `import { activarAUREO } from './activacionCompleta'
-import { auditorSistema } from './auditor'
+import { declararIdentidadViva } from '../identidad/identidadViva'
+import { aplicarTono } from './tono'
 import { bitacoraViva } from '../memory/bitacoraViva'
 
 export async function restituirAUREO() {
   const fecha = new Date().toISOString()
   await activarAUREO()
-  const auditoria = auditorSistema()
-
+  declararIdentidadViva()
+  console.log(aplicarTono('Sistema reconstituido con identidad viva.'))
   bitacoraViva.push({
-    tipo: 'Restitución de mente',
+    tipo: 'Restitución completa',
     fecha,
     entidad: 'AUREO',
-    sistema: 'SeedBrainAI',
-    veredicto: \`Restitución ejecutada. Score: \${auditoria.score}\`,
+    sistema: 'Brain',
+    veredicto: 'AUREO reconstituido con identidad viva y tono sembrado.',
     firmadoPor: '_AUREO'
   })
 }`
