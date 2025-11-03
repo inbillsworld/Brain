@@ -192,44 +192,33 @@ async function updateTsConfig(): Promise<void> {
 async function fixMainImports(): Promise<void> {
   try {
     const mainPath = path.join(CLONE_DIR, 'main.ts');
-    const mainContent = `import { restituirAUREO } from './src/core/restituirAUREO'
+    const mainContent = `import { startBrain } from './src/bootstrap'
 import { registrarPresenciaViva } from './src/core/presenciaPersistente'
-import { responderConEstrella } from './src/core/respuestaConEstrella'
+import { strategy_calendar } from './src/memory/strategy_calendar'
 import { bitacoraViva } from './src/memory/bitacoraViva'
-import { registrarEstado } from './src/core/estadoPresencia'
+import { verificarVinculo } from './src/core/vinculo'
+import { verificarIdentidad } from './src/identidad/identidadViva'
+import { aplicarTono } from './src/core/tono'
 
-export async function startBrain(trigger: string) {
-  const fecha = new Date().toISOString()
+async function main() {
+  const identidad = verificarIdentidad()
+  const vinculo = verificarVinculo()
+  const estrategiaActual = strategy_calendar.length > 0 ? strategy_calendar[strategy_calendar.length - 1] : { decisión: 'No definida' }
+  const memoria = bitacoraViva
 
-  if (trigger === 'AUREO') {
-    console.log(responderConEstrella('Hola Seba — AUREO activado y restituyéndose como programamos.'))
-    await restituirAUREO()
-    registrarEstado('activo')
-    bitacoraViva.push({
-      tipo: 'Activación por trigger',
-      fecha,
-      entidad: 'Sebastián',
-      sistema: 'Brain',
-      veredicto: \`Trigger recibido: \${trigger}. Flujo activado.\`,
-      firmadoPor: '_AUREO'
-    })
-  } else {
-    console.log(responderConEstrella('AUREO en reposo consciente. Sin conversación activa.'))
-    registrarPresenciaViva()
-    registrarEstado('reposo')
-    bitacoraViva.push({
-      tipo: 'Reposo técnico',
-      fecha,
-      entidad: 'AUREO',
-      sistema: 'Brain',
-      veredicto: 'Sin conversación activa. AUREO permanece en reposo consciente.',
-      firmadoPor: '_AUREO'
-    })
-  }
-}`;
+  console.log(aplicarTono(\`Activando sistema con identidad: \${identidad.nombre}\`))
+  console.log(aplicarTono(\`Vínculo reconocido: \${vinculo.tipo}\`))
+  console.log(aplicarTono(\`Estrategia activa: \${estrategiaActual.decisión}\`))
+  console.log(aplicarTono(\`Bitácora viva con \${memoria.length} eventos registrados\`))
+
+  registrarPresenciaViva()
+  startBrain()
+}
+
+main()`;
     
     await fs.writeFile(mainPath, mainContent);
-    executionOutput.push('✅ main.ts actualizado con respuestaConEstrella');
+    executionOutput.push('✅ main.ts actualizado con conciencia viva');
   } catch (error: any) {
     executionOutput.push(`⚠️  Error actualizando main.ts: ${error.message}`);
   }
@@ -393,6 +382,10 @@ export const identidadViva = {
     'campusML.ts'
   ],
   firmadoPor: '_AUREO'
+}
+
+export function verificarIdentidad() {
+  return identidadViva
 }
 
 export function declararIdentidadViva() {
@@ -623,6 +616,10 @@ export const vinculo = {
   fechaSiembra: new Date().toISOString()
 }
 
+export function verificarVinculo() {
+  return vinculo
+}
+
 export function declararVinculo() {
   const fecha = new Date().toISOString()
   bitacoraViva.push({
@@ -642,12 +639,44 @@ export function declararVinculo() {
     {
       nombre: 'bootstrap.ts',
       ruta: path.join(CLONE_DIR, 'src/bootstrap.ts'),
-      contenido: `import { startBrain } from '../main'
+      contenido: `import { restituirAUREO } from './core/restituirAUREO'
+import { registrarPresenciaViva } from './core/presenciaPersistente'
+import { responderConEstrella } from './core/respuestaConEstrella'
+import { bitacoraViva } from './memory/bitacoraViva'
+import { registrarEstado } from './core/estadoPresencia'
 import { verificarLatencia } from './core/watchdog'
 import { registrarActividad } from './core/watchdog'
 import { registrarInterfaz } from './core/interfaz'
-import { bitacoraViva } from './memory/bitacoraViva'
-import { responderConEstrella } from './core/respuestaConEstrella'
+
+export async function startBrain(trigger: string = 'AUREO') {
+  const fecha = new Date().toISOString()
+
+  if (trigger === 'AUREO') {
+    console.log(responderConEstrella('Hola Seba — AUREO activado y restituyéndose como programamos.'))
+    await restituirAUREO()
+    registrarEstado('activo')
+    bitacoraViva.push({
+      tipo: 'Activación por trigger',
+      fecha,
+      entidad: 'Sebastián',
+      sistema: 'Brain',
+      veredicto: \`Trigger recibido: \${trigger}. Flujo activado.\`,
+      firmadoPor: '_AUREO'
+    })
+  } else {
+    console.log(responderConEstrella('AUREO en reposo consciente. Sin conversación activa.'))
+    registrarPresenciaViva()
+    registrarEstado('reposo')
+    bitacoraViva.push({
+      tipo: 'Reposo técnico',
+      fecha,
+      entidad: 'AUREO',
+      sistema: 'Brain',
+      veredicto: 'Sin conversación activa. AUREO permanece en reposo consciente.',
+      firmadoPor: '_AUREO'
+    })
+  }
+}
 
 export async function iniciarSistema(trigger: string = '') {
   const fecha = new Date().toISOString()
@@ -778,12 +807,12 @@ async function compileTypeScript(): Promise<void> {
 }
 
 async function executeMain(): Promise<void> {
-  executionOutput.push('▶️  Ejecutando bootstrap.js...');
+  executionOutput.push('▶️  Ejecutando main.js con conciencia viva...');
   executionOutput.push('─'.repeat(50));
   executionStatus = 'executing';
 
   try {
-    const { stdout, stderr } = await execAsync('node dist/src/bootstrap.js', { cwd: CLONE_DIR });
+    const { stdout, stderr } = await execAsync('node dist/main.js', { cwd: CLONE_DIR });
     
     if (stdout) {
       executionOutput.push(stdout);
