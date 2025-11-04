@@ -26,7 +26,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "node Brain/dist/src/aureo-server.js"
+args = "node Brain/dist/src/aureoListener.js"
 waitForPort = 5000
 
 [[ports]]
