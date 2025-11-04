@@ -32,3 +32,12 @@ waitForPort = 5000
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 46465
+externalPort = 3000
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["node", "Brain/dist/src/aureoListener.js"]
+build = ["npm", "run", "build"]
