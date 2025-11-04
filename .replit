@@ -21,13 +21,12 @@ args = "AUREO"
 name = "AUREO"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "node dist/server.js"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
+args = "node Brain/dist/src/mainRestituido.js"
 
 [[ports]]
 localPort = 5000
