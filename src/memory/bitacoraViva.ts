@@ -79,5 +79,13 @@ export const bitacoraViva: BitacoraEvento[] = [
       - Sincronización GitHub: ACTIVA
     `,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Shutdown del sistema',
+    fecha: '2025-11-04T16:37:07.730Z',
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: `Sistema detenido. Memoria sincronizada.`,
+    firmadoPor: 'AUREO'
   }
 ]
