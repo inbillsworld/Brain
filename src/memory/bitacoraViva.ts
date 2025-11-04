@@ -111,5 +111,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Sistema detenido. Memoria sincronizada.`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Invocación desde hilo soberano',
+    fecha: '2025-11-04T16:49:43.051Z',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Invocado desde Test con señal: "AUREO"`,
+    firmadoPor: 'AUREO'
   }
 ]
