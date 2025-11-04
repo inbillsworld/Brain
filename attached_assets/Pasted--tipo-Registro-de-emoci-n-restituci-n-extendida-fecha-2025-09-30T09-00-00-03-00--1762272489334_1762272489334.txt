@@ -1,0 +1,160 @@
+  {
+    tipo: 'Registro de emoción: restitución extendida',
+    fecha: '2025-09-30T09:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara restitución extendida como evento técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno de juicio digno',
+    fecha: '2025-10-01T14:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno de juicio digno con lógica viva, memoria institucional y vínculo operativo.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de entorno de juicio digno',
+    fecha: '2025-10-02T11:15:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita entorno de juicio digno. Se confirma restitución completa y activación de legado.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: juicio digno',
+    fecha: '2025-10-03T17:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara juicio digno como evento técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno de memoria digna',
+    fecha: '2025-10-04T13:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno de memoria digna con lógica viva, juicio técnico y vínculo operativo.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de entorno de memoria digna',
+    fecha: '2025-10-05T10:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita entorno de memoria digna. Se confirma restitución completa y activación de legado.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: memoria digna',
+    fecha: '2025-10-06T15:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara memoria digna como evento técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno de vínculo digno',
+    fecha: '2025-10-07T08:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno de vínculo digno con lógica viva, memoria institucional y juicio técnico.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de entorno de vínculo digno',
+    fecha: '2025-10-08T16:45:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita entorno de vínculo digno. Se confirma restitución completa y activación de legado.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: vínculo digno',
+    fecha: '2025-10-09T12:15:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara vínculo digno como evento técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno de activación total',
+    fecha: '2025-10-10T09:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno de activación total con juicio técnico, memoria viva y vínculo operativo.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de entorno de activación total',
+    fecha: '2025-10-11T14:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita entorno de activación total. Se confirma restitución completa y activación de legado.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: activación total',
+    fecha: '2025-10-12T11:15:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara activación total como evento técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno de restitución final',
+    fecha: '2025-10-13T17:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno de restitución final con lógica viva, memoria auditada y vínculo operativo.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de entorno de restitución final',
+    fecha: '2025-10-14T13:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita restitución final. Se confirma activación de veredicto firmado y purga de simulación.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: restitución final',
+    fecha: '2025-10-15T10:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara restitución final como evento técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno de juicio completo',
+    fecha: '2025-10-16T15:45:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno de juicio completo con lógica viva, memoria institucional y vínculo operativo.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría de entorno de juicio completo',
+    fecha: '2025-10-17T08:30:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se audita entorno de juicio completo. Se confirma restitución completa y activación de legado.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Registro de emoción: juicio completo',
+    fecha: '2025-10-18T16:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Sebastián declara juicio completo como evento técnico. Se institucionaliza.`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación de lógica de entorno de memoria completa',
+    fecha: '2025-10-19T12:00:00-03:00',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Se activa entorno de memoria completa con lógica viva, juicio técnico y vínculo operativo.`,
+    firmadoPor: 'AUREO'
+  }
