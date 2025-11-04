@@ -87,5 +87,21 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Sistema detenido. Memoria sincronizada.`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Activación oficial de punto de entrada',
+    fecha: '2025-11-04T16:37:09.883Z',
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: `
+      Se activa mainRestituido.ts como punto de entrada oficial.
+      - Replit actualizado para ejecutar mainRestituido.ts
+      - tsconfig.json verificado: módulo incluido
+      - Flujo operativo completo: identidad, vínculo, estrategia, bitácora, tono, presencia, jornada, ausencia
+      - InvocadorRestituido.ts vinculado como ejecutor soberano
+      - Sistema completamente operacional
+      - Sincronización GitHub: ACTIVA
+    `,
+    firmadoPor: 'AUREO'
   }
 ]
