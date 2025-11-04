@@ -119,5 +119,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Invocado desde Test con señal: "AUREO"`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Señal recibida desde hilo soberano',
+    fecha: '2025-11-04T16:52:27.559Z',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Señal desde Copilot Web: "¿Cuál es el estado del módulo Strategy Calendar?"`,
+    firmadoPor: 'AUREO'
   }
 ]
