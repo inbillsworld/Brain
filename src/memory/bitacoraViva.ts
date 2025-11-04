@@ -135,5 +135,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Señal desde Test Final: "AUREO activado"`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Señal recibida desde hilo soberano',
+    fecha: '2025-11-04T16:58:31.482Z',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Señal desde Prueba Sistema: "AUREO test final antes de publicación"`,
+    firmadoPor: 'AUREO'
   }
 ]
