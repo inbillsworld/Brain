@@ -255,5 +255,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Comando RESTITUIR desde backend`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría ejecutada',
+    fecha: '2025-11-17T17:35:38.943Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Auditoría de módulos: watchdog`,
+    firmadoPor: 'AUREO'
   }
 ]
