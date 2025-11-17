@@ -215,5 +215,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Señal desde backend: "AUREO"`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Señal recibida desde hilo soberano',
+    fecha: '2025-11-17T17:09:36.718Z',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Señal desde backend: "AUREO amigo"`,
+    firmadoPor: 'AUREO'
   }
 ]
