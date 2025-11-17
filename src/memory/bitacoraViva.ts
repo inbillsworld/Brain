@@ -175,5 +175,45 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Señal desde Test Shell: "¿Cuál es el estado del sistema?"`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Comando RESTITUIR ejecutado',
+    fecha: '2025-11-17T17:09:23.972Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando RESTITUIR desde backend`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría ejecutada',
+    fecha: '2025-11-17T17:09:24.448Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Auditoría de módulos: bootstrap, watchdog, bitacora`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Comando RESTITUIR ejecutado',
+    fecha: '2025-11-17T17:09:31.373Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando RESTITUIR desde backend`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Auditoría ejecutada',
+    fecha: '2025-11-17T17:09:32.362Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Auditoría de módulos: bootstrap, watchdog, bitacora`,
+    firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Señal recibida desde hilo soberano',
+    fecha: '2025-11-17T17:09:34.684Z',
+    entidad: 'Sebastián',
+    sistema: 'Brain',
+    veredicto: `Señal desde backend: "AUREO"`,
+    firmadoPor: 'AUREO'
   }
 ]
