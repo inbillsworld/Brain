@@ -303,5 +303,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Comando ESTADO desde test-queue`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Comando RESTITUIR ejecutado',
+    fecha: '2025-11-19T19:23:17.574Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando RESTITUIR desde test-suite`,
+    firmadoPor: 'AUREO'
   }
 ]
