@@ -271,5 +271,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Comando ESTADO desde backend`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Comando RESTITUIR ejecutado',
+    fecha: '2025-11-19T19:11:08.569Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando RESTITUIR desde test-suite`,
+    firmadoPor: 'AUREO'
   }
 ]
