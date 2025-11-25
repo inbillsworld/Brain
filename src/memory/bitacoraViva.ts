@@ -327,5 +327,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Auditoría de módulos: bitacora`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Shutdown del servidor HTTP',
+    fecha: '2025-11-25T20:46:56.334Z',
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: `Servidor HTTP detenido. Memoria sincronizada.`,
+    firmadoPor: 'AUREO'
   }
 ]
