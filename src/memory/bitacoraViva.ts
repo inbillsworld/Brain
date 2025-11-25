@@ -407,5 +407,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Servidor HTTP detenido. Memoria sincronizada.`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Comando RESTITUIR ejecutado',
+    fecha: '2025-11-25T20:51:12.207Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando RESTITUIR desde test-suite`,
+    firmadoPor: 'AUREO'
   }
 ]
