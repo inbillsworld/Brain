@@ -383,5 +383,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Servidor HTTP detenido. Memoria sincronizada.`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Consulta de mente ejecutada',
+    fecha: '2025-11-25T20:49:56.587Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando MENTE desde test`,
+    firmadoPor: 'AUREO'
   }
 ]
