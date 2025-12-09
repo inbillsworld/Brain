@@ -519,5 +519,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Comando ESTADO desde test-suite`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Shutdown del servidor HTTP',
+    fecha: '2025-12-09T18:27:29.875Z',
+    entidad: 'AUREO',
+    sistema: 'Brain',
+    veredicto: `Servidor HTTP detenido. Memoria sincronizada.`,
+    firmadoPor: 'AUREO'
   }
 ]
