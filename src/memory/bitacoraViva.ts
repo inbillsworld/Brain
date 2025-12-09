@@ -511,5 +511,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Comando ESTADO desde test-suite`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Consulta de estado ejecutada',
+    fecha: '2025-12-09T18:26:05.231Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando ESTADO desde test-suite`,
+    firmadoPor: 'AUREO'
   }
 ]
