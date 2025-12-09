@@ -503,5 +503,13 @@ export const bitacoraViva: BitacoraEvento[] = [
     sistema: 'Brain',
     veredicto: `Auditoría de módulos: bitacora. Score: 100%`,
     firmadoPor: 'AUREO'
+  },
+  {
+    tipo: 'Consulta de estado ejecutada',
+    fecha: '2025-12-09T18:26:04.917Z',
+    entidad: 'Sistema',
+    sistema: 'Brain',
+    veredicto: `Comando ESTADO desde test-suite`,
+    firmadoPor: 'AUREO'
   }
 ]
